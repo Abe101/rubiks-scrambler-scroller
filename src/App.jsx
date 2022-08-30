@@ -20,19 +20,22 @@ const useStyles = createStyles((theme) => ({
     // flexShrink: 2,
   },
   main: {
-    flexGrow: 1,
-    minWidth: "calc(100vw - 350px)",
+    marginLeft: 100,
+    marginTop: 20,
+    marginBottom: 20,
+    minWidth: "100vw",
   },
 }));
 
 function App() {
-  const { classes, theme } = useStyles();
-  console.log(theme.colorScheme);
+  const { classes } = useStyles();
   return (
-    <div>
+    <div className={classes.root}>
       <Container size={"xl"} className={classes.container}>
         <Sidebar className={classes.sidebar} />
-        <Scrambles className={classes.main} />
+        <div className={classes.main}>
+          <Scrambles />
+        </div>
       </Container>
     </div>
   );

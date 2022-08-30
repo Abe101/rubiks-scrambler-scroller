@@ -111,6 +111,8 @@ export default function Sidebar() {
 
   return (
     <Navbar
+      fixed
+      position={{ top: 5, left: 10 }}
       height={800}
       width={{ base: 350, xs: 350, sm: 350, md: 350, lg: 350, xl: 350 }}
       p={"md"}
