@@ -5,28 +5,36 @@ import Scrambles from "./Components/Scrambles";
 
 const useStyles = createStyles((theme) => ({
   root: {
-    width: "100%",
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[7]
+        : theme.colors.gray[0],
+  },
+  container: {
+    width: "100vw",
     height: "100%",
     display: "flex",
     flexDirection: "row",
   },
   sidebar: {
-    flexShrink: 2,
+    // flexShrink: 2,
   },
   main: {
     flexGrow: 1,
+    minWidth: "calc(100vw - 350px)",
   },
 }));
 
 function App() {
-  const { classes } = useStyles();
+  const { classes, theme } = useStyles();
+  console.log(theme.colorScheme);
   return (
-    <Container>
-      <div className={classes.root}>
+    <div>
+      <Container size={"xl"} className={classes.container}>
         <Sidebar className={classes.sidebar} />
         <Scrambles className={classes.main} />
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 }
 

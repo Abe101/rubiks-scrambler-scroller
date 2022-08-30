@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
       <App />
     </MantineProvider>
   </Provider>

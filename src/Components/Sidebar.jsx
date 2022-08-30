@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   createStyles,
   Navbar,
@@ -6,8 +7,15 @@ import {
   ThemeIcon,
   ScrollArea,
   Text,
+  Button,
 } from "@mantine/core";
-import { Icon3dCubeSphere } from "@tabler/icons";
+import {
+  Icon3dCubeSphere,
+  IconPlayerPlay,
+  IconPlayerStop,
+} from "@tabler/icons";
+
+import { startScrambling, stopScrambling } from "../Redux/Modules/scrambler";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -60,23 +68,57 @@ const cubeColors = [
   { from: "blue.7", to: "green.7" },
 ];
 
-export default function Sidebar() {
-  const { classes } = useStyles();
+function getRandomCubeColors() {
+  const idx = Math.floor(Math.random() * 3);
+  return cubeColors[idx];
+}
 
-  function getRandomCubeColors() {
-    const idx = Math.floor(Math.random() * 3);
-    return cubeColors[idx];
+export default function Sidebar() {
+  const dispatch = useDispatch();
+  const { classes } = useStyles();
+  const scrambling = useSelector((state) => state.scrambler.scrambling);
+  const [iconColorCombo, setIconColorCombo] = React.useState({});
+
+  React.useEffect(() => {
+    setIconColorCombo(getRandomCubeColors());
+  }, []);
+
+  function ScramblingButton({ state }) {
+    if (state) {
+      return (
+        <Button
+          leftIcon={<IconPlayerStop />}
+          variant='gradient'
+          gradient={{ from: "orange", to: "red" }}
+          onClick={() => dispatch(stopScrambling())}
+        >
+          Stop Scrambling
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          leftIcon={<IconPlayerPlay />}
+          variant='gradient'
+          gradient={{ from: "teal", to: "lime" }}
+          onClick={() => dispatch(startScrambling())}
+        >
+          Start Scrambling
+        </Button>
+      );
+    }
   }
 
   return (
-    <Navbar height={800} width={150} p={"md"} className={classes.navbar}>
+    <Navbar
+      height={800}
+      width={{ base: 350, xs: 350, sm: 350, md: 350, lg: 350, xl: 350 }}
+      p={"md"}
+      className={classes.navbar}
+    >
       <Navbar.Section className={classes.header}>
         <Group>
-          <ThemeIcon
-            size={"lg"}
-            variant={"gradient"}
-            gradient={getRandomCubeColors()}
-          >
+          <ThemeIcon size={"lg"} variant={"gradient"} gradient={iconColorCombo}>
             <Icon3dCubeSphere size={20} />
           </ThemeIcon>
           <Text size={"xl"} weight={700} className={classes.title}>
@@ -85,7 +127,9 @@ export default function Sidebar() {
         </Group>
       </Navbar.Section>
       <Navbar.Section grow className={classes.links} component={ScrollArea}>
-        <div className={classes.linksInner}></div>
+        <div className={classes.linksInner}>
+          <ScramblingButton state={scrambling} />
+        </div>
       </Navbar.Section>
       <Navbar.Section className={classes.footer}></Navbar.Section>
     </Navbar>
