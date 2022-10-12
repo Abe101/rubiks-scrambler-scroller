@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import cubeScrambler from "cube-scrambler";
 import InfiniteScroll from "react-infinite-scroller";
 import {
@@ -12,11 +12,14 @@ import {
 } from "@mantine/core";
 import { scrollSpy, Events, animateScroll } from "react-scroll";
 
+import { stopScrambling } from "../Redux/modules/scrambler";
+
 const useStyles = createStyles((theme) => ({
   paper: {},
 }));
 
 export default function Scrambles() {
+  const dispatch = useDispatch();
   const { classes, theme } = useStyles();
   const scrambling = useSelector((state) => state.scrambler.scrambling);
   const [scrambles, setScrambles] = React.useState([]);
@@ -28,6 +31,7 @@ export default function Scrambles() {
 
     Events.scrollEvent.register("end", function (to, element) {
       console.log("end", arguments);
+      dispatch(stopScrambling());
     });
 
     scrollSpy.update();
@@ -36,9 +40,7 @@ export default function Scrambles() {
       Events.scrollEvent.remove("begin");
       Events.scrollEvent.remove("end");
     };
-  }, []);
-
-  console.log(window.scrollY);
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (scrambling) {
@@ -86,9 +88,8 @@ export default function Scrambles() {
           <InfiniteScroll
             pageStart={0}
             loadMore={runScrambles}
-            hasMore={scrambles.length < 500}
+            hasMore={scrambles.length < 100}
             loader={<Loader color={"indigo"} />}
-            useWindow={true}
           >
             {items}
           </InfiniteScroll>

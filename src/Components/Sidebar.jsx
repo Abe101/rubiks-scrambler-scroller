@@ -114,7 +114,7 @@ export default function Sidebar() {
       fixed
       position={{ top: 5, left: 10 }}
       height={800}
-      width={{ base: 350, xs: 350, sm: 350, md: 350, lg: 350, xl: 350 }}
+      width={{ base: 200, xs: 200, sm: 200, md: 200, lg: 200, xl: 200 }}
       p={"md"}
       className={classes.navbar}
     >
@@ -124,7 +124,11 @@ export default function Sidebar() {
             <Icon3dCubeSphere size={20} />
           </ThemeIcon>
           <Text size={"xl"} weight={700} className={classes.title}>
-            Rubiks Scrambler Scroller
+            Rubiks
+            <br />
+            Scrambler
+            <br />
+            Scroller
           </Text>
         </Group>
       </Navbar.Section>
