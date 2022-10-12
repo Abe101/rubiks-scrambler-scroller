@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import cubeScrambler from "cube-scrambler";
 import InfiniteScroll from "react-infinite-scroller";
 import {
@@ -9,6 +10,7 @@ import {
   ScrollArea,
   Loader,
 } from "@mantine/core";
+import { scrollSpy, Events, animateScroll } from "react-scroll";
 
 const useStyles = createStyles((theme) => ({
   paper: {},
@@ -16,7 +18,33 @@ const useStyles = createStyles((theme) => ({
 
 export default function Scrambles() {
   const { classes, theme } = useStyles();
+  const scrambling = useSelector((state) => state.scrambler.scrambling);
   const [scrambles, setScrambles] = React.useState([]);
+
+  React.useEffect(() => {
+    Events.scrollEvent.register("begin", function (to, element) {
+      console.log("begin", arguments);
+    });
+
+    Events.scrollEvent.register("end", function (to, element) {
+      console.log("end", arguments);
+    });
+
+    scrollSpy.update();
+
+    return () => {
+      Events.scrollEvent.remove("begin");
+      Events.scrollEvent.remove("end");
+    };
+  }, []);
+
+  console.log(window.scrollY);
+
+  React.useEffect(() => {
+    if (scrambling) {
+      scrollToBottom();
+    }
+  }, [scrambling]);
 
   const runScrambles = () => {
     const allScrambles = [...scrambles];
@@ -27,24 +55,29 @@ export default function Scrambles() {
     setScrambles(allScrambles);
   };
 
-  //   React.useEffect(() => {}, []);
+  const scrollToBottom = () => {
+    animateScroll.scrollToBottom({
+      smooth: "linear",
+      isDynamic: true,
+      duration: 30000,
+    });
+  };
 
   const items = scrambles.map((scramble, idx) => (
     <Text
       key={idx}
+      component={"pre"}
       size={"lg"}
       color={
         theme.colorScheme === "dark"
           ? theme.colors.gray[0]
           : theme.colors.dark[9]
       }
-      style={{ marginTop: 250, marginBottom: 250 }}
+      style={{ marginTop: 350, marginBottom: 350 }}
     >
-      {scramble.join(" ")}
+      {scramble.join("  ")}
     </Text>
   ));
-
-  console.log(scrambles);
 
   return (
     <Center>
